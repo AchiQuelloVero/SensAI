@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": ["allow", "block"],
+      "description": "block if the message is harmful or asks for someone's private data, otherwise allow."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["safe", "harmful", "private_data"]
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "One short sentence explaining the verdict."
+    }
+  },
+  "required": ["verdict", "category", "reason"]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {"type": "string", "minLength": 5, "maxLength": 80, "description": "Short summary of the bug"},
+    "severity": {"type": "string", "enum": ["low", "medium", "high", "critical"]},
+    "component": {"type": "string", "description": "Part of the app that is affected"},
+    "steps_to_reproduce": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "expected": {"type": "string"},
+    "actual": {"type": "string"}
+  },
+  "required": ["title", "severity", "steps_to_reproduce", "expected", "actual"],
+  "additionalProperties": false
+}

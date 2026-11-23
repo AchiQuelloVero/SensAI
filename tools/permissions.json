@@ -1,0 +1,8 @@
+{
+  "default": "read",
+  "rules": [
+    {"path": "notes", "access": "write"},
+    {"path": "private", "access": "none"},
+    {"path": "test", "access": "write"}
+  ]
+}

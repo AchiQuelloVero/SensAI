@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "facts": {
+      "type": "array",
+      "description": "Facts the user stated about themselves, one short sentence each.",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["facts"]
+}

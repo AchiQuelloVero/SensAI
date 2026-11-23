@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "difference": {
+      "type": "string",
+      "maxLength": 150,
+      "description": "The most important thing one question asks that the other doesn't (a number, a language or tool, an action, a constraint, a level of detail), or 'none'."
+    },
+    "same": {
+      "type": "boolean",
+      "description": "true only if one answer would fully and correctly answer both questions."
+    }
+  },
+  "required": ["difference", "same"]
+}

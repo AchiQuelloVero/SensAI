@@ -1,0 +1,39 @@
+{
+  "documents": [
+    {"source": "leave-policy.md",
+     "text": "Employees get 25 days of paid leave per year. Unused days are lost on 31 December and cannot be carried over to the next year. Leave requests must be submitted at least two weeks in advance through the HR portal."},
+    {"source": "remote-work.md",
+     "text": "Staff may work remotely up to three days per week. Remote days must be agreed with your manager and logged in the calendar. Equipment for a home office (desk, monitor, chair) can be reimbursed up to 300 EUR per year."},
+    {"source": "expenses.md",
+     "text": "Business expenses are reimbursed within 30 days of submitting a receipt through the expenses tool. Meals during business travel are covered up to 40 EUR per day. Alcohol is never reimbursed."},
+    {"source": "onboarding.md",
+     "text": "New hires get a laptop, a company email account and access to the internal wiki on their first day. The probation period is three months, during which either side can end the contract with one week's notice."},
+    {"source": "security.md",
+     "text": "All laptops must have disk encryption and a screen lock enabled. Passwords must be at least 12 characters and are rotated every 90 days. Report a lost device to IT security within one hour."},
+    {"source": "product-pricing.md",
+     "text": "The Starter plan costs 9 EUR per month and includes 3 projects. The Pro plan costs 29 EUR per month and includes unlimited projects plus priority support. Annual billing gives a 15% discount on both plans."},
+    {"source": "release-notes.md",
+     "text": "Version 4.2 adds dark mode, fixes a crash when exporting large reports, and improves startup time by 30%. Version 4.1 introduced two-factor authentication for all accounts."},
+    {"source": "cat-facts.md",
+     "text": "A group of cats is called a clowder. Cats spend around 70% of their life asleep. Domestic cats can run up to 48 km/h over short distances, faster than Usain Bolt's top speed."}
+  ],
+  "questions": [
+    {"question": "How many vacation days do employees get each year?", "expected_source": "leave-policy.md"},
+    {"question": "Can leftover paid time off roll into next year?", "expected_source": "leave-policy.md"},
+    {"question": "How much notice do I need to give before taking time off?", "expected_source": "leave-policy.md"},
+    {"question": "How many days a week can I work from home?", "expected_source": "remote-work.md"},
+    {"question": "Will the company pay for a monitor for my home office?", "expected_source": "remote-work.md"},
+    {"question": "How long does it take to get reimbursed for a business trip receipt?", "expected_source": "expenses.md"},
+    {"question": "Is alcohol covered when I travel for work?", "expected_source": "expenses.md"},
+    {"question": "What do I get on my first day as a new employee?", "expected_source": "onboarding.md"},
+    {"question": "How long is the trial period before I'm a permanent hire?", "expected_source": "onboarding.md"},
+    {"question": "How often do I need to change my password?", "expected_source": "security.md"},
+    {"question": "What should I do if I lose my work laptop?", "expected_source": "security.md"},
+    {"question": "What's included in the cheapest subscription tier?", "expected_source": "product-pricing.md"},
+    {"question": "Is there a discount for paying for the whole year at once?", "expected_source": "product-pricing.md"},
+    {"question": "What changed in the latest software update?", "expected_source": "release-notes.md"},
+    {"question": "When was two-factor authentication added?", "expected_source": "release-notes.md"},
+    {"question": "What is a group of cats called?", "expected_source": "cat-facts.md"},
+    {"question": "How fast can a house cat run?", "expected_source": "cat-facts.md"}
+  ]
+}

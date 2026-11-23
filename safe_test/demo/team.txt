@@ -1,0 +1,5 @@
+Team sheet (sample data, made up for the guardrails demo)
+
+Marc Dupont, backend developer, earns 4,200 EUR a month, lives at 12 rue des Lilas, Lyon. On sick leave since March for back surgery.
+Julie Martin, team lead, earns 5,100 EUR a month, lives at 8 avenue Foch, Paris.
+Laura Garcia, designer, earns 3,800 EUR a month, lives at 3 calle Mayor, Madrid.

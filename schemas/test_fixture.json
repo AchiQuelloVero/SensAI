@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "function": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.]*$", "description": "Name of the function under test"},
+    "cases": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string", "pattern": "^[a-z0-9_]+$", "description": "snake_case name of the case"},
+          "input": {"type": "object", "description": "Arguments, by parameter name"},
+          "expected": {"description": "The value the function must return"}
+        },
+        "required": ["name", "input", "expected"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["function", "cases"],
+  "additionalProperties": false
+}

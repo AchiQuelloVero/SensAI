@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {"type": "string", "minLength": 3},
+          "owner": {"type": ["string", "null"], "description": "Who does it, or null if nobody was named"},
+          "priority": {"type": "string", "enum": ["low", "medium", "high"]},
+          "due": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "description": "YYYY-MM-DD, or null if no date was given"}
+        },
+        "required": ["title", "owner", "priority", "due"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["tasks"],
+  "additionalProperties": false
+}

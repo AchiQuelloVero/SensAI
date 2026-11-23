@@ -1,0 +1,45 @@
+# Virtual environments
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Secrets / local config
+.env
+
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Saved chat sessions
+sessions/
+.README_RUN.md
+
+# Call log
+calls.jsonl
+
+# MCP server output
+mcp.log
+
+# Prompt version history
+prompt_versions/
+
+# Local runtime config (model, auto_approve, no_guardrails), set via Settings
+config.json
+
+# RAG vector index (rebuilt with the ingest command)
+rag_index.sqlite*
+
+# Other knowledge bases: their documents, indexes and registry
+knowledge_bases/
+rag_indexes/
+rag_collections.json
+
+# Semantic cache of saved answers (emptied with /cache clear)
+semantic_cache.sqlite*
+
+# Published conversation snapshots
+shared/

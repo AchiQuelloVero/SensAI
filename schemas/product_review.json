@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "product": {"type": "string"},
+    "rating": {"type": "integer", "minimum": 1, "maximum": 5, "description": "Stars, from 1 to 5"},
+    "pros": {"type": "array", "items": {"type": "string"}},
+    "cons": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": ["product", "rating", "pros", "cons"],
+  "additionalProperties": false
+}

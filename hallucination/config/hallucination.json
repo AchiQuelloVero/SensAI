@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "judge_model": null,
+  "confidence_threshold": 0.7,
+  "action": "warn",
+  "self_consistency": {
+    "enabled": false,
+    "samples": 3,
+    "temperature": 1.0
+  },
+  "refusal_message": "I'm not confident enough in this answer to give it: parts of it are not supported by our conversation, the tool results or your documents."
+}

@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "claims": {
+      "type": "array",
+      "description": "The factual claims made by the answer, one per item. Each is a short sentence stating a single fact that can be checked, understandable on its own (names instead of pronouns). Empty if the answer states no fact.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": ["claims"]
+}

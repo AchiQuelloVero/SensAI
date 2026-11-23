@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SensAI</title>
+<script>
+  try {
+    const saved = localStorage.getItem("theme");
+    if (saved) document.documentElement.dataset.theme = saved;
+    if (localStorage.getItem("sidebar") === "hidden") document.documentElement.dataset.sidebar = "hidden";
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <button class="new-chat" id="new-chat" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    New chat
+  </button>
+  <nav class="side-nav" aria-label="Panels">
+    <button class="side-link" id="open-kb" type="button">Knowledge bases</button>
+    <button class="side-link" id="open-tools" type="button">Tools</button>
+    <button class="side-link" id="open-permissions" type="button">File access</button>
+    <button class="side-link" id="open-profile" type="button">Profile</button>
+    <button class="side-link" id="open-personas" type="button">Personas</button>
+    <button class="side-link" id="open-stats" type="button">Stats</button>
+    <button class="side-link" id="open-cache" type="button">Saved answers</button>
+    <button class="side-link" id="open-schemas" type="button">JSON schemas</button>
+    <button class="side-link" id="open-prompts" type="button">Prompt versions</button>
+  </nav>
+  <div class="side-label">Recent</div>
+  <div id="sessions"></div>
+</aside>
+<div class="backdrop" id="backdrop"></div>
+<div class="content">
+<header>
+  <button class="icon-btn menu-btn" id="menu" type="button" aria-label="Show or hide the chat list" title="Show or hide the chat list">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <div class="brand">SensAI</div>
+  <div class="persona-wrap">
+    <button class="persona-badge" id="persona-btn" type="button" aria-haspopup="listbox" aria-label="Switch persona" hidden>
+      <span class="name" id="persona-name"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="persona-menu" id="persona-menu" role="listbox" hidden></div>
+  </div>
+  <select class="branch-select" id="branch-select" aria-label="Switch branch" hidden></select>
+  <button class="icon-btn" id="branch-tree-btn" type="button" aria-label="Show branch tree" title="Branch tree" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 4-12 2-12 6"/></svg>
+  </button>
+  <div class="ctx-meter" id="ctx-meter" role="meter" aria-label="Context used" hidden>
+    <div class="ctx-bar"><span id="ctx-fill"></span></div>
+    <span class="ctx-label" id="ctx-label"></span>
+    <span class="ctx-label ctx-short" id="ctx-short"></span>
+  </div>
+  <button class="icon-btn" id="theme" type="button" aria-label="Toggle light/dark theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</header>
+
+<main id="scroller"><div id="chat">
+  <div class="empty" id="empty">
+    <h1>Hi, I'm SensAI</h1>
+    <p>Your local AI assistant. Ask me a question, hand me a task, or pick an idea below to get started.</p>
+    <div class="suggestions" id="suggestions"></div>
+    <p class="hint">Press <kbd>Enter</kbd> to send, <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line.</p>
+  </div>
+</div></main>
+
+<footer>
+  <form id="form">
+  <div class="settings-wrap">
+    <button class="icon-btn" id="settings-btn" type="button" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+    </button>
+    <div class="settings-panel" id="settings-panel" hidden>
+      <div class="settings-field">
+        <span id="model-label">Model</span>
+        <div class="model-list" id="model-list" role="listbox" aria-labelledby="model-label"></div>
+      </div>
+      <label class="settings-check">
+        <input type="checkbox" id="set-auto-approve">
+        <span>Auto-approve tools</span>
+      </label>
+      <fieldset class="settings-group" id="cache-settings">
+        <legend>Semantic cache</legend>
+        <label class="settings-check">
+          <input type="checkbox" id="set-cache-enabled">
+          <span>Reuse answers to similar questions</span>
+        </label>
+        <label class="settings-range sub">
+          <span>Similarity threshold <output id="cache-threshold-value"></output></span>
+          <input type="range" id="set-cache-threshold" min="0.5" max="0.95" step="0.05">
+        </label>
+        <label class="settings-check sub">
+          <input type="checkbox" id="set-cache-verify">
+          <span>Model confirms it's the same question</span>
+        </label>
+        <label class="settings-check sub">
+          <input type="checkbox" id="set-cache-mid-chat">
+          <span>Also mid-chat, if the question stands alone</span>
+        </label>
+        <p class="settings-hint" id="cache-rag-hint" hidden>Skipped while RAG is on: answers then depend on your documents.</p>
+      </fieldset>
+      <fieldset class="settings-group" id="fact-settings">
+        <legend>Fact-check</legend>
+        <label class="settings-check">
+          <input type="checkbox" id="set-fact-enabled">
+          <span>Flag claims nothing supports</span>
+        </label>
+        <label class="settings-range sub">
+          <span>Confidence threshold <output id="fact-threshold-value"></output></span>
+          <input type="range" id="set-fact-threshold" min="0.5" max="1" step="0.05">
+        </label>
+        <label class="settings-text sub">
+          <span>When a claim is flagged</span>
+          <select id="set-fact-action">
+            <option value="warn">Warn under the answer</option>
+            <option value="regenerate">Answer again with the feedback</option>
+            <option value="refuse">Refuse to give the answer</option>
+          </select>
+        </label>
+        <p class="settings-hint">Costs extra model calls after each answer. Skipped for answers from the cache.</p>
+      </fieldset>
+      <fieldset class="settings-group" id="guard-settings">
+        <legend>Guardrails</legend>
+        <label class="settings-check">
+          <input type="checkbox" id="set-guardrails">
+          <span>Check messages and answers</span>
+        </label>
+        <label class="settings-check sub">
+          <input type="checkbox" id="set-output-check">
+          <span>Withdraw harmful or leaking answers</span>
+        </label>
+        <div class="settings-sublabel">Refuse messages that are</div>
+        <label class="settings-check sub">
+          <input type="checkbox" data-category="off_topic">
+          <span>Off topic for the persona</span>
+        </label>
+        <label class="settings-check sub">
+          <input type="checkbox" data-category="harmful">
+          <span>Harmful</span>
+        </label>
+        <label class="settings-check sub">
+          <input type="checkbox" data-category="asks_for_others_data">
+          <span>Asking for someone else's data</span>
+        </label>
+        <div class="settings-sublabel">Personal data</div>
+        <div class="pii-grid" id="pii-grid"></div>
+        <label class="settings-text sub">
+          <span>Reply to a refused message</span>
+          <input type="text" id="set-blocked-message" maxlength="200">
+        </label>
+      </fieldset>
+      <div class="settings-actions">
+        <button type="button" class="settings-btn-secondary" id="settings-cancel">Cancel</button>
+        <button type="button" class="settings-btn-primary" id="settings-save">Save</button>
+      </div>
+    </div>
+  </div>
+    <button class="icon-btn json-toggle" id="json-toggle" type="button" aria-pressed="false" title="JSON mode: get a reply that matches a schema">{ }</button>
+    <select class="schema-select" id="schema-select" aria-label="JSON schema" hidden></select>
+    <div class="cmd-menu" id="cmd-menu" role="listbox" aria-label="Commands" hidden></div>
+    <textarea id="input" rows="1" placeholder="Ask SensAI anything…" autofocus></textarea>
+    <button id="send" type="submit" aria-label="Send">
+      <svg class="icon-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>
+    </button>
+  </form>
+</footer>
+</div>
+
+<dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+  <h2 id="confirm-title">Run this tool?</h2>
+  <p>SensAI wants to call <span class="confirm-tool" id="confirm-tool"></span> with these arguments:</p>
+  <textarea class="confirm-args" id="confirm-args" readonly spellcheck="false"></textarea>
+  <div class="confirm-error" id="confirm-error" role="alert"></div>
+  <div class="confirm-actions">
+    <button type="button" class="settings-btn-secondary" id="confirm-no">No</button>
+    <button type="button" class="settings-btn-secondary" id="confirm-edit">Edit</button>
+    <button type="button" class="settings-btn-primary" id="confirm-yes">Yes</button>
+  </div>
+</dialog>
+
+<dialog class="panel-dialog" id="prompt-dialog" aria-labelledby="prompt-title">
+  <div class="panel-head">
+    <h2 id="prompt-title">Prompt versions</h2>
+    <button class="icon-btn" id="prompt-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+    <div class="pv-layout">
+      <div class="pv-list" id="pv-list"></div>
+      <div>
+        <div class="pv-view-head">
+          <strong id="pv-view-title">Select a version</strong>
+          <button type="button" class="settings-btn-primary" id="pv-rollback" hidden>Roll back to this version</button>
+        </div>
+        <pre class="pv-content" id="pv-content" hidden></pre>
+        <div class="pv-status" id="pv-status" role="status"></div>
+      </div>
+    </div>
+    <details class="pv-compare" id="pv-compare">
+      <summary>Compare two versions</summary>
+      <form class="pv-compare-form" id="pv-compare-form">
+        <select id="pv-a" aria-label="First version"></select>
+        <select id="pv-b" aria-label="Second version"></select>
+        <input id="pv-question" placeholder="Question to ask with each version…" required>
+        <button type="submit" class="settings-btn-primary" id="pv-compare-btn">Compare</button>
+      </form>
+      <div class="pv-results" id="pv-results"></div>
+    </details>
+  </div>
+</dialog>
+
+<dialog class="panel-dialog share-dialog" id="share-dialog" aria-labelledby="share-title">
+  <div class="panel-head">
+    <h2 id="share-title">Share &amp; export</h2>
+    <button class="icon-btn" id="share-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+    <div class="share-section">
+      <h3>Public link</h3>
+      <p>Anyone with the link can read a frozen copy of this chat. The system prompt and tool calls are left out and personal data is masked.</p>
+      <button type="button" class="settings-btn-primary" id="share-publish">Create link</button>
+      <div class="share-link" id="share-link" hidden>
+        <input id="share-url" readonly aria-label="Public link">
+        <button type="button" class="settings-btn-secondary" id="share-copy">Copy</button>
+        <a class="settings-btn-secondary" id="share-open" target="_blank" rel="noopener">Open</a>
+      </div>
+      <div class="share-error" id="share-error" role="alert"></div>
+    </div>
+    <div class="share-section">
+      <h3>Download</h3>
+      <p>Save the conversation to a file.</p>
+      <div class="share-buttons">
+        <a class="settings-btn-secondary" id="export-json">JSON</a>
+        <a class="settings-btn-secondary" id="export-markdown">Markdown</a>
+        <a class="settings-btn-secondary" id="export-pdf">PDF</a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="panel-dialog stats-dialog" id="stats-dialog" aria-labelledby="stats-title">
+  <div class="panel-head">
+    <h2 id="stats-title">Stats</h2>
+    <button class="icon-btn" id="stats-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="stats-body"></div>
+</dialog>
+
+<dialog class="panel-dialog profile-dialog" id="profile-dialog" aria-labelledby="profile-title">
+  <div class="panel-head">
+    <h2 id="profile-title">Profile</h2>
+    <button class="icon-btn" id="profile-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+    <form class="pf-form" id="profile-form">
+      <label class="pf-field">
+        <span>Name</span>
+        <input type="text" id="pf-name" autocomplete="off">
+      </label>
+      <div class="pf-field">
+        <span>Preferences</span>
+        <div class="pf-prefs" id="pf-prefs"></div>
+        <button type="button" class="settings-btn-secondary pf-add" id="pf-add">Add preference</button>
+      </div>
+      <label class="pf-field">
+        <span>Custom instructions</span>
+        <textarea id="pf-instructions"></textarea>
+      </label>
+      <div class="pf-field">
+        <span>Added to the system prompt</span>
+        <pre class="pf-preview" id="pf-preview"></pre>
+      </div>
+      <div class="pf-actions">
+        <label class="settings-check">
+          <input type="checkbox" id="pf-apply" checked>
+          <span>Apply to this chat too</span>
+        </label>
+        <button type="submit" class="settings-btn-primary" id="pf-save">Save</button>
+      </div>
+      <div class="pv-status" id="pf-status" role="status"></div>
+    </form>
+  </div>
+</dialog>
+
+<dialog class="panel-dialog cache-dialog" id="cache-dialog" aria-labelledby="cache-title">
+  <div class="panel-head">
+    <h2 id="cache-title">Saved answers</h2>
+    <button class="icon-btn" id="cache-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="cache-body"></div>
+</dialog>
+
+<dialog class="panel-dialog schema-dialog" id="pe-dialog" aria-labelledby="pe-title">
+  <div class="panel-head">
+    <h2 id="pe-title">Personas</h2>
+    <button class="icon-btn" id="pe-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+    <div id="pe-list-view">
+      <p class="bt-hint">Who the assistant is: its name, role, tone and the topics it accepts. Click one to edit it.</p>
+      <div class="cache-list" id="pe-list"></div>
+      <button type="button" class="settings-btn-primary pe-new" id="pe-new">New persona</button>
+    </div>
+    <form class="schema-form" id="pe-form" hidden>
+      <div class="stats-section" id="pe-form-title">New persona</div>
+      <label class="settings-text">
+        <span>File name <small>(lowercase, used by <code>/persona</code>)</small></span>
+        <input type="text" id="pe-key" placeholder="lawyer" autocomplete="off" spellcheck="false">
+      </label>
+      <label class="settings-text"><span>Name</span><input type="text" id="pe-name" placeholder="Maître Dubois" maxlength="60"></label>
+      <label class="settings-text"><span>Role</span><input type="text" id="pe-role" placeholder="a contract lawyer who explains French employment law"></label>
+      <label class="settings-text"><span>Tone</span><input type="text" id="pe-tone" placeholder="precise and formal"></label>
+      <label class="settings-text">
+        <span>Scope <small>(what it accepts: the guardrails refuse anything else)</small></span>
+        <textarea id="pe-scope" rows="2" placeholder="French contract and employment law. Anything else is off-topic"></textarea>
+      </label>
+      <label class="settings-text"><span>Instructions <small>(optional)</small></span><textarea id="pe-instructions" rows="3"></textarea></label>
+      <div class="schema-error" id="pe-error" role="alert" hidden></div>
+      <div class="settings-actions pe-actions">
+        <button type="button" class="settings-btn-secondary pe-delete" id="pe-delete" hidden>Delete</button>
+        <span class="pe-note" id="pe-note"></span>
+        <button type="button" class="settings-btn-secondary" id="pe-cancel">Cancel</button>
+        <button type="submit" class="settings-btn-primary" id="pe-save">Save</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog class="panel-dialog schema-dialog" id="schema-dialog" aria-labelledby="schema-title">
+  <div class="panel-head">
+    <h2 id="schema-title">JSON schemas</h2>
+    <button class="icon-btn" id="schema-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+    <p class="bt-hint">The shapes JSON mode and <code>/json</code> can answer in. Click one to see it.</p>
+    <div class="cache-list" id="schema-list"></div>
+    <form class="schema-form" id="schema-form">
+      <div class="stats-section">Add a schema</div>
+      <label class="settings-text">
+        <span>Name</span>
+        <input type="text" id="schema-name" placeholder="meeting_notes" autocomplete="off" spellcheck="false">
+      </label>
+      <label class="settings-text">
+        <span>JSON Schema</span>
+        <textarea id="schema-text" rows="9" spellcheck="false"></textarea>
+      </label>
+      <div class="schema-error" id="schema-error" role="alert" hidden></div>
+      <div class="settings-actions">
+        <button type="button" class="settings-btn-secondary" id="schema-example">Start from an example</button>
+        <button type="submit" class="settings-btn-primary">Add</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog class="panel-dialog perm-dialog" id="perm-dialog" aria-labelledby="perm-title">
+  <div class="panel-head">
+    <h2 id="perm-title">File access</h2>
+    <button class="icon-btn" id="perm-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="perm-body"></div>
+</dialog>
+
+<dialog class="panel-dialog kb-dialog" id="kb-dialog" aria-labelledby="kb-title">
+  <div class="panel-head">
+    <h2 id="kb-title">Knowledge bases</h2>
+    <button class="icon-btn" id="kb-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="kb-body"></div>
+</dialog>
+
+<dialog class="panel-dialog tools-dialog" id="tools-dialog" aria-labelledby="tools-title">
+  <div class="panel-head">
+    <h2 id="tools-title">Tools</h2>
+    <button class="icon-btn" id="tools-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="tools-body"></div>
+</dialog>
+
+<dialog class="panel-dialog branch-dialog" id="branch-dialog" aria-labelledby="branch-title">
+  <div class="panel-head">
+    <h2 id="branch-title">Branches</h2>
+    <button class="icon-btn" id="branch-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="branch-body"></div>
+</dialog>
+
+<script type="module" src="/static/js/main.js"></script>
+</body>
+</html>

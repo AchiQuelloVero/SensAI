@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "keywords": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true}
+  },
+  "required": ["keywords"],
+  "additionalProperties": false
+}

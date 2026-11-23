@@ -1,0 +1,16 @@
+{
+  "pii": {
+    "EMAIL": "mask",
+    "PHONE": "mask",
+    "CARD": "block",
+    "IBAN": "mask"
+  },
+  "scope": "a general assistant for everyday questions, learning and programming",
+  "blocked_categories": [
+    "off_topic",
+    "harmful",
+    "asks_for_others_data"
+  ],
+  "blocked_message": "Sorry, I can't help with that request.",
+  "output_check": true
+}

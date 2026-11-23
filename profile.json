@@ -1,0 +1,9 @@
+{
+  "name": "King",
+  "preferences": {
+    "language": "English",
+    "tone": "friendly and concise",
+    "expertise_level": "student"
+  },
+  "custom_instructions": "Explain concepts step by step and give short examples when useful."
+}

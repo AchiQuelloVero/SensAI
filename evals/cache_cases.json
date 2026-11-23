@@ -1,0 +1,83 @@
+{
+  "pairs": [
+    {"same": true, "saved": "How do I undo my last git commit?", "new": "How can I revert my most recent git commit?"},
+    {"same": true, "saved": "What is the difference between a list and a tuple in Python?", "new": "list vs tuple in python, what's the difference?"},
+    {"same": true, "saved": "How do I reverse a string in JavaScript?", "new": "What's the way to reverse a string in JS?"},
+    {"same": true, "saved": "What is a binary search tree?", "new": "Can you explain what a binary search tree is?"},
+    {"same": true, "saved": "How do I center a div in CSS?", "new": "What's the best way to center a div with CSS?"},
+    {"same": true, "saved": "What causes the seasons on Earth?", "new": "Why does Earth have seasons?"},
+    {"same": true, "saved": "How do I create a virtual environment in Python?", "new": "How can I make a Python venv?"},
+    {"same": true, "saved": "What is the capital of Australia?", "new": "Which city is Australia's capital?"},
+    {"same": true, "saved": "How many bytes are in a kilobyte?", "new": "A kilobyte is how many bytes?"},
+    {"same": true, "saved": "How do I delete a local git branch?", "new": "What's the command to remove a git branch locally?"},
+    {"same": false, "saved": "How do I undo my last git commit?", "new": "How do I undo my last 3 git commits?"},
+    {"same": false, "saved": "How do I undo my last git commit?", "new": "How do I undo my last git push?"},
+    {"same": false, "saved": "How do I reverse a string in JavaScript?", "new": "How do I reverse a string in Python?"},
+    {"same": false, "saved": "How do I delete a local git branch?", "new": "How do I delete a remote git branch?"},
+    {"same": false, "saved": "What is the capital of Australia?", "new": "What is the capital of Austria?"},
+    {"same": false, "saved": "How do I sort a list in Python in ascending order?", "new": "How do I sort a list in Python in descending order?"},
+    {"same": false, "saved": "Explain recursion in one sentence.", "new": "Explain recursion in detail with code examples."},
+    {"same": false, "saved": "How many bytes are in a kilobyte?", "new": "How many bytes are in a megabyte?"},
+    {"same": false, "saved": "Convert 100 Fahrenheit to Celsius.", "new": "Convert 100 Celsius to Fahrenheit."},
+    {"same": false, "saved": "What's a good vegetarian dinner recipe?", "new": "What's a good vegan dinner recipe?"}
+  ],
+  "new_pairs": [
+    {"same": true, "saved": "How do I rename a file in Linux?", "new": "What's the Linux command to rename a file?"},
+    {"same": true, "saved": "What is the boiling point of water at sea level?", "new": "At sea level, at what temperature does water boil?"},
+    {"same": true, "saved": "How do I check my Python version?", "new": "Which command shows the installed Python version?"},
+    {"same": true, "saved": "What does HTTP status 404 mean?", "new": "What is a 404 error in HTTP?"},
+    {"same": false, "saved": "What is the population of Slovakia?", "new": "What is the population of Slovenia?"},
+    {"same": false, "saved": "How do I convert UTC to CET?", "new": "How do I convert CET to UTC?"},
+    {"same": false, "saved": "How do I import a CSV file into Excel?", "new": "How do I export a CSV file from Excel?"},
+    {"same": false, "saved": "How do I list files newest first in Linux?", "new": "How do I list files oldest first in Linux?"},
+    {"same": false, "saved": "Who wrote the novel Dune?", "new": "Who directed the movie Dune?"},
+    {"same": false, "saved": "How do I add a column to a SQL table?", "new": "How do I drop a column from a SQL table?"},
+    {"same": false, "saved": "What is the exchange rate from euros to dollars?", "new": "What is the exchange rate from dollars to euros?"},
+    {"same": false, "saved": "How do I turn on dark mode in Windows 11?", "new": "How do I turn on dark mode in Windows 10?"}
+  ],
+  "follow_ups": [
+    {
+      "history": [
+        {"role": "user", "content": "What is the weather like in Rome in spring?"},
+        {"role": "assistant", "content": "Spring in Rome is mild, around 15-22 C, with some rain in March."}
+      ],
+      "questions": [
+        {"standalone": false, "text": "and in Paris?"},
+        {"standalone": false, "text": "Is it rainy there in April?"},
+        {"standalone": false, "text": "Can you make it shorter?"},
+        {"standalone": true, "text": "What is a git rebase?"},
+        {"standalone": true, "text": "What is the capital of Japan?"},
+        {"standalone": true, "text": "How do I undo my last git commit?"}
+      ]
+    },
+    {
+      "history": [
+        {"role": "user", "content": "Give me three ways to sort a list in Python."},
+        {"role": "assistant", "content": "1. sorted(my_list) 2. my_list.sort() 3. sorted(my_list, key=len) to sort by length."}
+      ],
+      "questions": [
+        {"standalone": false, "text": "What about the second one?"},
+        {"standalone": false, "text": "Show me that again in JavaScript."},
+        {"standalone": false, "text": "Which is the fastest?"},
+        {"standalone": true, "text": "How do I sort a list in Python?"},
+        {"standalone": true, "text": "What is the difference between a list and a tuple in Python?"},
+        {"standalone": true, "text": "How do I center a div in CSS?"}
+      ]
+    },
+    {
+      "new": true,
+      "history": [
+        {"role": "user", "content": "How do I make pancakes?"},
+        {"role": "assistant", "content": "Mix 200 g flour, 2 eggs and 300 ml milk, then cook each side for about a minute in a hot pan."}
+      ],
+      "questions": [
+        {"standalone": false, "text": "Can I use oat milk instead?"},
+        {"standalone": false, "text": "How many does that make?"},
+        {"standalone": false, "text": "Why the eggs?"},
+        {"standalone": true, "text": "How do I make French toast?"},
+        {"standalone": true, "text": "What is the tallest mountain in Europe?"},
+        {"standalone": true, "text": "How do I convert grams to ounces?"}
+      ]
+    }
+  ]
+}

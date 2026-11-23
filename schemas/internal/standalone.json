@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "reason": {
+      "type": "string",
+      "maxLength": 150,
+      "description": "What in the new question refers to the earlier conversation (a pronoun, 'again', 'more', 'the second one', a missing subject), or 'none'."
+    },
+    "standalone": {
+      "type": "boolean",
+      "description": "true only if the new question can be answered fully without reading the earlier conversation."
+    }
+  },
+  "required": ["reason", "standalone"]
+}
